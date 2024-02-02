@@ -89,8 +89,8 @@ void Server::acceptRequest()
     fcntl(tmp._cliFd, F_SETFL, O_NONBLOCK); //burada bağlantıyı nonblocking yapıyoruz
     if (tmp._cliFd <= 0)
         throw std::runtime_error("Accept failed");
-    tmp._port = ntohs(cliAddr.sin_port);
-    inet_ntop(AF_INET, &(cliAddr.sin_addr), tmp._ipAddr, INET_ADDRSTRLEN);
+    tmp._port = ntohs(cliAddr.sin_port); //burada portu set ediyoruz bunu yapma sebebimiz clientin portunu almak
+    inet_ntop(AF_INET, &(cliAddr.sin_addr), tmp._ipAddr, INET_ADDRSTRLEN); //bağlantı kabul edilen istemcinin IP adresini alır ve bu adresi metin formatına dönüştürür.
     FD_SET(tmp._cliFd, &_readFds);
     std::cout << GREEN << "New client connected!" << RESET << std::endl;
     _fdCount++;
