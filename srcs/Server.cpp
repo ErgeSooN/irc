@@ -12,7 +12,7 @@ Server::~Server()
     close(_serverFd);
 }
 
-Server* Server::getInstance()
+Server* Server::getInstance() //burası singleton yapısı
 {
     try 
     {
@@ -26,7 +26,7 @@ Server* Server::getInstance()
     }
 }
 
-void Server::initCommands()
+void Server::initCommands() //burada komutları initialize ediyoruz
 {
     _commands["PASS"] = &Server::Pass;
     _commands["NICK"] = &Server::Nick;
@@ -55,11 +55,11 @@ void Server::initCommands()
 
 void Server::createSocket()
 {
-    if ((_serverFd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+    if ((_serverFd = socket(AF_INET, SOCK_STREAM, 0)) < 0) //burada socketi oluşturuyoruz
         throw std::runtime_error("Socket");
-    fcntl(_serverFd, F_SETFL, O_NONBLOCK);
+    fcntl(_serverFd, F_SETFL, O_NONBLOCK);//burada socketi nonblocking yapıyoruz
     const int enable = 1;
-    if (setsockopt(_serverFd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int)) < 0)
+    if (setsockopt(_serverFd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int)) < 0) // burada socketi tekrar kullanılabilir yapıyoruz
         throw std::runtime_error("Setsockopt");
 }
 
@@ -67,15 +67,15 @@ void Server::bindSocket(size_t const & port)
 {
     struct sockaddr_in server_addr;
 
-    memset(&server_addr, 0, sizeof(server_addr));
-    server_addr.sin_addr.s_addr = INADDR_ANY;
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_port = htons(port);
+    memset(&server_addr, 0, sizeof(server_addr)); //burada server_addr structını sıfırlıyoruz
+    server_addr.sin_addr.s_addr = INADDR_ANY;     //burada server_addr structının ip adresini
+    server_addr.sin_family = AF_INET;             //burada server_addr structının family'sini
+    server_addr.sin_port = htons(port);           //burada server_addr structının portunu set ediyoruz
 
-    if (bind(_serverFd, (struct sockaddr *) &server_addr, sizeof(server_addr)) < 0)
+    if (bind(_serverFd, (struct sockaddr *) &server_addr, sizeof(server_addr)) < 0) //burada server_addr structını serverFd'ye bağlıyoruz
         throw std::runtime_error("Bind");
 
-    if (listen(_serverFd, SOMAXCONN) < 0)
+    if (listen(_serverFd, SOMAXCONN) < 0) //burada serverFd'yi dinliyoruz
         throw std::runtime_error("Listen");
 }
 
@@ -85,8 +85,8 @@ void Server::acceptRequest()
     sockaddr_in cliAddr;
     socklen_t cliSize = sizeof(cliAddr);
 
-    tmp._cliFd = accept(_serverFd, (sockaddr *)&cliAddr, &cliSize);
-    fcntl(tmp._cliFd, F_SETFL, O_NONBLOCK);
+    tmp._cliFd = accept(_serverFd, (sockaddr *)&cliAddr, &cliSize); //burada serverFd'den gelen bağlantıyı kabul ediyoruz
+    fcntl(tmp._cliFd, F_SETFL, O_NONBLOCK); //burada bağlantıyı nonblocking yapıyoruz
     if (tmp._cliFd <= 0)
         throw std::runtime_error("Accept failed");
     tmp._port = ntohs(cliAddr.sin_port);
@@ -184,11 +184,11 @@ void Server::readEvent(int* state)
 
 void Server::initFds()
 {
-    FD_ZERO(&_readFds);
-    FD_ZERO(&_writeFds);
-    FD_ZERO(&_readFdsSup);
-    FD_ZERO(&_writeFdsSup);
-    FD_SET(_serverFd, &_readFds);
+    FD_ZERO(&_readFds); //burada readFds'i sıfırlıyoruz
+    FD_ZERO(&_writeFds); //burada writeFds'i sıfırlıyoruz
+    FD_ZERO(&_readFdsSup);  //burada readFdsSup'ı sıfırlıyoruz
+    FD_ZERO(&_writeFdsSup);  //burada writeFdsSup'ı sıfırlıyoruz
+    FD_SET(_serverFd, &_readFds); //burada serverFd'yi readFds'e ekliyoruz
 }
 
 void Server::writeEvent()
@@ -215,13 +215,13 @@ void Server::run()
 {
     int state = 0;
 
-    initFds();
+    initFds(); //burada fdsleri initialize ediyoruz
     while (1)
     {
-        _readFdsSup = _readFds;
-        _writeFdsSup = _writeFds;
-        state = select(_fdCount + 4, &_readFdsSup, &_writeFdsSup, NULL, 0);
-        if (FD_ISSET(_serverFd, &_readFdsSup)) 
+        _readFdsSup = _readFds; //burada readFdsSup'ı readFds'e eşitliyoruz
+        _writeFdsSup = _writeFds; //burada writeFdsSup'ı writeFds'e eşitliyoruz bunları eşitlelememizin sebebi select fonksiyonunun fdsleri değiştirmesidir
+        state = select(_fdCount + 4, &_readFdsSup, &_writeFdsSup, NULL, 0); //burada _SUP'larda değişiklik olmadığı sürece select fonksiyonunu çalıştırıyoruz. değişiklik olursa select fonksiyonundan çıkıp state'i 1 yapıyoruz
+        if (FD_ISSET(_serverFd, &_readFdsSup)) //burada serverFd'nin readFdsSup'da olup olmadığını kontrol ediyoruz
         {
             acceptRequest();
             state = 0; 
@@ -245,11 +245,11 @@ void Server::run()
 
 void Server::manageServer(size_t const& port, std::string const& password)
 {
-    setPort(port);
-    setPassword(password);
-    initCommands();
-    createSocket();
-    bindSocket(port);
-    printStatus();
-    run();
+    setPort(port); //burada portu set ediyoruz
+    setPassword(password); //burada passwordu set ediyoruz
+    initCommands(); //burada komutları initialize ediyoruz
+    createSocket(); //burada socketi oluşturuyoruz
+    bindSocket(port);   //burada socketi portla bağlıyoruz
+    printStatus();  //burada serverın statusunu yazdırıyoruz
+    run();  //burada serverı çalıştırıyoruz
 }
