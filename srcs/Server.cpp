@@ -93,8 +93,8 @@ void Server::acceptRequest()
     inet_ntop(AF_INET, &(cliAddr.sin_addr), tmp._ipAddr, INET_ADDRSTRLEN); //bağlantı kabul edilen istemcinin IP adresini alır ve bu adresi metin formatına dönüştürür.
     FD_SET(tmp._cliFd, &_readFds);
     std::cout << GREEN << "New client connected!" << RESET << std::endl;
-    _fdCount++;
-    _clients.push_back(tmp);
+    _fdCount++; //sunucuda kaç tane bağlantı olduğunu tutar
+    _clients.push_back(tmp); //burada bağlantıyı clients vektörüne ekliyoruz
 }
 
 std::map<std::string, std::vector<std::string> > Server::getParams(std::string const& str)
@@ -135,26 +135,29 @@ std::map<std::string, std::vector<std::string> > Server::getParams(std::string c
 
 void Server::commandHandler(std::string& str, Client& cli)
 {
-    std::map<std::string, std::vector<std::string> > params = getParams(str);
-    for (std::map<std::string, std::vector<std::string> >::iterator it = params.begin(); it != params.end(); ++it) {
-        if (_commands.find(it->first) == _commands.end())
+    std::map<std::string, std::vector<std::string> > params = getParams(str); //burada girilen paramtreleri params vektörüne atıyoruz
+    for (std::map<std::string, std::vector<std::string> >::iterator it = params.begin(); it != params.end(); ++it) //burada params vektörünü it vektörüne atıp döngüde geziyoruz
+    {
+        if (_commands.find(it->first) == _commands.end()) //eğer girilen komut commands vektöründe yoksa hata mesajı yazdırıyoruz
         {
             Utils::writeMessage(cli._cliFd, "421 : " + it->first + " :Unknown command!\r\n");
             std::cout << RED << it->first << " command not found!" << RESET << std::endl;
         }
         else
-            (this->*_commands[it->first])(it->second, cli);
+            (this->*_commands[it->first])(it->second, cli); //eğer girilen komut commands vektöründe varsa komutu çalıştırmak için gerekli fonksiyona gidiyoruz.
     }
 }
 
 void Server::readEvent(int* state)
 {
-    for (cliIt it = _clients.begin(); it != _clients.end(); ++it) {
-        if (FD_ISSET(it->_cliFd, &_readFdsSup))
+    for (cliIt it = _clients.begin(); it != _clients.end(); ++it) //burada tüm clientleri gezip onların read eventlerini kontrol ediyoruz
+    {
+        if (FD_ISSET(it->_cliFd, &_readFdsSup)) //burada clientin readFdsSup'ta olup olmadığını kontrol ediyoruz
         {
-            *state = 0;
-            int readed = read(it->_cliFd, _buffer, 1024);
-            if (readed <= 0) {
+            *state = 0; 
+            int readed = read(it->_cliFd, _buffer, 1024); //burada clientten gelen mesajı okuyoruz
+            if (readed <= 0) //eğer okuma yapılamazsa veya client bağlantısı koparsa clienti quit fonksiyonuna gönderiyoruz
+            {
                 std::vector<std::string> tmp;
                 tmp.push_back("");
                 (this->*_commands["QUIT"])(tmp, *it);
@@ -163,17 +166,20 @@ void Server::readEvent(int* state)
             {
                 _buffer[readed] = 0;
                 std::string tmp = _buffer;
-                if (tmp == "\n") {
-                    *state = 0; break;
+                if (tmp == "\n") 
+                {
+                    *state = 0; 
+                    break;
                 }
-                if (tmp[tmp.length() - 1] != '\n')
+                if (tmp[tmp.length() - 1] != '\n') // eğer clientten gelen mesajın sonunda \n yoksa mesajı buffer'a ekliyoruz.
                 {
                     it->_buffer += tmp;
-                    *state = 0; break;
+                    *state = 0; 
+                    break;
                 }
                 else 
-                    it->_buffer = it->_buffer + tmp;
-                std::cout << YELLOW << it->_buffer << RESET;
+                    it->_buffer = it->_buffer + tmp; //eğer clientten gelen mesajın sonunda \n varsa mesajı buffer'a ekliyoruz
+                std::cout << YELLOW << it->_buffer << RESET; //burada clientten gelen mesajı sunucuya yazdırıyoruz
                 commandHandler(it->_buffer, *it);
                 it->_buffer.clear();
             }
@@ -190,6 +196,21 @@ void Server::initFds()
     FD_ZERO(&_writeFdsSup);  //burada writeFdsSup'ı sıfırlıyoruz
     FD_SET(_serverFd, &_readFds); //burada serverFd'yi readFds'e ekliyoruz
 }
+
+/*
+    it->_cliFd: Bu, yazma işlemi için kullanılacak olan istemci dosya tanımlayıcısıdır. 
+    Bu, genellikle bir soket tanımlayıcısıdır ve write fonksiyonu bu tanımlayıcıyı kullanarak belirli 
+    bir istemciye veri gönderir.
+
+    it->_messageBox[0].c_str(): Bu, gönderilecek veriyi temsil eder. 
+    it->_messageBox[0] bir std::string ifadesidir ve .c_str() metodu 
+    bu stringi bir C-style stringe (null karakterle sonlanan bir karakter dizisi) dönüştürür. 
+    write fonksiyonu, bu C-style stringi kullanarak veriyi gönderir.
+
+    it->_messageBox[0].size(): Bu, gönderilecek verinin boyutunu belirtir. 
+    write fonksiyonu, bu boyutu kullanarak ne kadar veri göndermesi gerektiğini bilir.
+
+*/
 
 void Server::writeEvent()
 {
