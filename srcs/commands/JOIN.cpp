@@ -19,27 +19,27 @@ void Server::Join(std::vector<std::string>& params, Client& cli)
         Utils::writeMessage(cli._cliFd, ERR_INVCHANNAME);
         return;
     }
-    if (clientIsInThere(cli, chan) == 0)
-    {
-        if (!cli._nick.empty())
+        if (clientIsInThere(cli, chan) == 0) // kullanıcı yoksa içeriye girer
         {
-            for (chanIt it = _channels.begin(); it != _channels.end(); ++it) {
-                if (it->_name == chan)
-                {
-                    if (it->_key == key)
+            if (!cli._nick.empty()) // nicknamesi varmı ?
+            {
+                for (chanIt it = _channels.begin(); it != _channels.end(); ++it) {
+                    if (it->_name == chan) //Kanal adı (it->_name) kullanıcının katılmaya çalıştığı kanal adı (chan) ile eşleşiyorsa içeri girilir.
                     {
-                        if (it->_userLimit != 0 && it->_channelClients.size() >= it->_userLimit)
+                        if (it->_key == key) // kanalda şifre varmı varsa girer
                         {
-                            Utils::writeMessage(cli._cliFd, ERR_CHANNELISFULL(cli._nick, chan));
-                            return;
+                            if (it->_userLimit != 0 && it->_channelClients.size() >= it->_userLimit) //Kanalın kullanıcı sınırları (it->_userLimit) kontrol edilir.
+                            {
+                                Utils::writeMessage(cli._cliFd, ERR_CHANNELISFULL(cli._nick, chan));
+                                return;
+                            }
+                            it->_channelClients.push_back(cli); // Kullanıcı kanala eklenir.
+                            it->_opNick = it->_channelClients[0]._nick; // Kanalın operatör takma adı (it->_opNick) güncellenir.
+                            Utils::writeMessage(cli._cliFd, RPL_JOIN(cli._nick, cli._ip, chan)); // Kullanıcıya katılım mesajı (RPL_JOIN) gönderilir.
+                            std::cout << PURPLE << "Client " << cli._nick << " has entered \'" << chan << "\'" << RESET << std::endl;
+                            showRightGui(cli, *it); // kullanıcı arayüzü güncellenir.
                         }
-                        it->_channelClients.push_back(cli);
-                        it->_opNick = it->_channelClients[0]._nick;
-                        Utils::writeMessage(cli._cliFd, RPL_JOIN(cli._nick, cli._ip, chan));
-                        std::cout << PURPLE << "Client " << cli._nick << " has entered \'" << chan << "\'" << RESET << std::endl;
-                        showRightGui(cli, *it);
-                    }
-                    else if (it->_key == "")
+                        else if (it->_key == "")
                         Utils::writeMessage(cli._cliFd, "Key not required for this channel!\r\n");
                     else
                         Utils::writeMessage(cli._cliFd, ERR_BADCHANNELKEY(cli._nick, chan));

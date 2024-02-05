@@ -108,7 +108,7 @@ void Server::setPassword(std::string const& password)
     _password = password;
 }
 
-void Server::printStatus() //burada serverın çalıştığı portu, passwordu ve serverın çalıştığı makineyi yazdırıyoruz
+void Server::printStatus()
 {
     char name[255];
 

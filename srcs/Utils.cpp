@@ -36,20 +36,17 @@ std::string Utils::welcome()
 {
     std::string data;
 
-    data +=  ".-.  .-. .----. .-.    .----.  .---.  .-.  .-. .----.   .-----.  .---.  \n";
-    data += "| {  } | } |__} } |    | }`-' / {-. \\ }  \\/  { } |__}   `-' '-' / {-. \\ \n";
-    data += "{  /\\  } } '__} } '--. | },-. \\ '-} / | {  } | } '__}     } {   \\ '-} / \n";
-    data += "`-'  `-' `----' `----' `----'  `---'  `-'  `-' `----'     `-'    `---'  \n";
-    data += "                                                                        \n";
-    data += "                     .---.  .-. .-. .---.    \n";
-    data += "                    / {-. \\ | } { | } }}_}             mbrettsc\n";
-    data += "                    \\ '-} / \\ `-' / | } \\              uakkan\n";
-    data += "                     `---'   `---'  `-'-'              ykarabul\n";
-    data += "                                             \n";
-    data += ".-. .---.  .----.      .----. .----. .---.  .-.   .-..----. .---.  \n";
-    data += "{ | } }}_} | }`-'     { {__-` } |__} } }}_}  \\ \\_/ / } |__} } }}_} \n";
-    data += "| } | } \\  | },-.     .-._} } } '__} | } \\    \\   /  } '__} | } \\  \n";
-    data += "`-' `-'-'  `----'     `----'  `----' `-'-'     `-'   `----' `-'-'\n";
+    data += "\n Serverimize Hoşgeldiniz\n";
+    data += " Server Özellikleri \n";
+    data +=" i9 13900k CPU \n";
+    data +=" RTX 3090 Ti \n";
+    data +=" 64 GB DDR5 Ram 5000 MHZ \n\n\n";
+
+    data += " Developers\n\n";
+    data +=" Onur Öztürk    -> oozturk\n";
+    data +=" Ali Eren Yaman -> Ayaman \n";
+
+    
     
     return data;
 }

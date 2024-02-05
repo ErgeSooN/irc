@@ -12,45 +12,32 @@ Server::~Server()
     close(_serverFd);
 }
 
-Server* Server::getInstance() //burası singleton yapısı
+Server* Server::getInstance()
 {
-    try 
-    {
+    try {
         if (singleton == NULL)
             singleton = new Server;
         return singleton;
-    } catch (std::exception & e) 
-    {
+    } catch (std::exception & e) {
         std::cerr << e.what() << std::endl;
         exit(1);
     }
 }
 
-void Server::initCommands() //burada komutları initialize ediyoruz
+void Server::initCommands()
 {
     _commands["PASS"] = &Server::Pass;
     _commands["NICK"] = &Server::Nick;
     _commands["JOIN"] = &Server::Join;
-    _commands["CAP"] = &Server::Cap;
     _commands["USER"] = &Server::User;
-    _commands["WHO"] = &Server::Who;
     _commands["QUIT"] = &Server::Quit;
-    _commands["PART"] = &Server::Part;
     _commands["INFO"] = &Server::Info;
     _commands["PRIVMSG"] = &Server::Privmsg;
-    _commands["WHOIS"] = &Server::Whois;
-    _commands["whois"] = &Server::Whois;
     _commands["NOTICE"] = &Server::Notice;
     _commands["KICK"] = &Server::Kick;
     _commands["MODE"] = &Server::Mode;
     _commands["mode"] = &Server::Mode;
-    _commands["TOPIC"] = &Server::Topic;
-    _commands["topic"] = &Server::Topic;
-    _commands["LIST"] = &Server::List;
-    _commands["INVITE"] = &Server::Invite;
-    _commands["OPER"] = &Server::Oper;
-    _commands["bot"] = &Server::Bot;
-    _commands["HELPME"] = &Server::Help;
+   
 }
 
 void Server::createSocket()

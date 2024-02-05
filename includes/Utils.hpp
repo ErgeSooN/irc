@@ -18,24 +18,16 @@
 #define RPL_JOIN(nick, ip, channel)					":" + nick + "!" + nick + "@" + ip + " JOIN " + channel + "\r\n"
 #define RPL_NAMREPLY(nick, channel, users)			": 353 " + nick + " = " + channel + " :" + users + "\r\n"
 #define RPL_ENDOFNAMES(nick, channel)               ": 366 " + nick + " " + channel + " :End of /NAMES list\r\n"
-#define RPL_JOIN_NOV_6(nick, channel)				":" + nick + "!" + nick + "@" + "127.0.0.1" + " JOIN " + channel + "\r\n"
-#define RPL_TOPIC(nick, ip, channel, topic)         ":" + nick + "!" + nick + "@" + ip + " TOPIC " + channel + " :" + topic + "\r\n"       
-#define RPL_INVITE(nick, ip, channel, target)       ":" + nick + "!" + nick + "@" + ip + " INVITE " + target + " " + channel + "\r\n"  
+#define RPL_JOIN_NOV_6(nick, channel)				":" + nick + "!" + nick + "@" + "127.0.0.1" + " JOIN " + channel + "\r\n"        
 #define RPL_PRIVMSG(source, target, message)		":" + source + " PRIVMSG " + target + " :" + message + "\r\n"
 #define RPL_NOTICE(source, target, message)			":" + source + " NOTICE " + target + " :" + message + "\r\n"
 #define RPL_NICK(nick, user, ip, newnick)			":" + nick + "!" + user + "@" + ip + " NICK :" + newnick + "\r\n"
 #define RPL_KICK(source, channel, target, reason)	":" + source + " KICK " + channel + " " + target + " :" + reason + "\r\n"
-#define RPL_PART(source, channel)					":" + source + " PART :" + channel + "\r\n"
-#define RPL_PONG(source, token)						":" + source + " PING :" + token + "\r\n"
 #define RPL_QUIT(source, message)                   ":" + source + " QUIT :" + message + "\r\n"
 #define RPL_MODE(source, channel, modes, args)		":" + source + " MODE " + channel + " " + modes + " " + args + "\r\n"
 #define RPL_INFO(source, info)                      ":" + source + " 371 * :" + info + "\r\n"
 
-/* [WHOIS] */
-#define RPL_WHOISUSER(nick, user, ip)				": 311 " + nick + " " + nick + " " + nick + " " + ip + " * :" + user + "\r\n"
-#define RPL_WHOISSERVER(source, server)				": 312 " + source + " * :" + server + "\r\n"
-#define RPL_ENDOFWHOIS(source, nick)				": 318 " + source + " " + nick + " :End of /WHOIS list" + "\r\n"
-#define RPL_PING(source, nick, second)				":" + source + " PONG " + nick + " :"+ second + "\r\n"
+
 
 
 # define RPL_LISTSTART(nick, numusers)			    ": 321 " + nick + " Channel : "+ numusers + "\r\n"
@@ -55,7 +47,6 @@
 #define ERR_NICKNAMEINUSE(source)				    ": 433 " + source + " " + source  + " :Nickname is already in use" + "\r\n"         //NICK
 #define ERR_NICKNAMEEMPTY(source)				    ": 433 " + source + " " + source  + " :Nickname cannot empty" + "\r\n"              //NICK
 #define ERR_UNKNOWNMODE(source, channel, mode)	    ": 472 " + source + " " +  channel + " :Unknown Mode " + mode + "\r\n"              //MODE
-#define RPL_NOTOPIC(nick, channel)                  ": 331 " + nick + " " + channel + " :No topic is set" + "\r\n"                      //TOPIC
 
 
 #define ERR_NICKNAMEINUSE(source) ": 433 " + source + " " + source  + " :Nickname is already in use" + "\r\n"

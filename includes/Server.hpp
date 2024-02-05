@@ -75,26 +75,21 @@ class Server
         void Pass(std::vector<std::string>&, Client&);
         void Nick(std::vector<std::string>&, Client&);
         void Join(std::vector<std::string>&, Client&);
-        void Cap(std::vector<std::string>&, Client&);
         void User(std::vector<std::string>&, Client&);
         void Mode(std::vector<std::string>&, Client&);
-        void Who(std::vector<std::string>&, Client&);
-        void Whois(std::vector<std::string>&, Client&);
+        
         void Quit(std::vector<std::string>&, Client&);
-        void Part(std::vector<std::string>&, Client&);
+        
         void Info(std::vector<std::string>&, Client&);
         void Privmsg(std::vector<std::string>&, Client&);
         void Kick(std::vector<std::string>&, Client&);
-        void Topic(std::vector<std::string>&, Client&);
-        void Notice(std::vector<std::string>&, Client&);
-        void List(std::vector<std::string>&, Client&);
-        void Invite(std::vector<std::string>&, Client&);
-        void Oper(std::vector<std::string>&, Client&);
-        void Bot(std::vector<std::string>&, Client&);
-        void Help(std::vector<std::string>&, Client&);
         
-        ~Server();
+        void Notice(std::vector<std::string>&, Client&);
+        
+      
+       
     public:
+        ~Server();
         void manageServer(size_t const &, std::string const &);
         static Server* getInstance();
 };
