@@ -32,12 +32,25 @@ void Server::initCommands()
     _commands["USER"] = &Server::User;
     _commands["QUIT"] = &Server::Quit;
     _commands["INFO"] = &Server::Info;
+    _commands["CAP"] = &Server::Cap;
     _commands["PRIVMSG"] = &Server::Privmsg;
     _commands["NOTICE"] = &Server::Notice;
     _commands["KICK"] = &Server::Kick;
     _commands["MODE"] = &Server::Mode;
+    _commands["WHO"] = &Server::Who;
+
+    _commands["pass"] = &Server::Pass;
+    _commands["nick"] = &Server::Nick;
+    _commands["join"] = &Server::Join;
+    _commands["user"] = &Server::User;
+    _commands["quit"] = &Server::Quit;
+    _commands["info"] = &Server::Info;
+    _commands["cap"] = &Server::Cap;
+    _commands["privmsg"] = &Server::Privmsg;
+    _commands["notice"] = &Server::Notice;
+    _commands["kick"] = &Server::Kick;
     _commands["mode"] = &Server::Mode;
-   
+    _commands["who"] = &Server::Who;
 }
 
 void Server::createSocket()
@@ -153,6 +166,7 @@ void Server::readEvent(int* state)
             {
                 _buffer[readed] = 0;
                 std::string tmp = _buffer;
+
                 if (tmp == "\n") 
                 {
                     *state = 0; 
@@ -160,6 +174,7 @@ void Server::readEvent(int* state)
                 }
                 if (tmp[tmp.length() - 1] != '\n') // eğer clientten gelen mesajın sonunda \n yoksa mesajı buffer'a ekliyoruz.
                 {
+                    std::cout << YELLOW << "newline\n"<< RESET;
                     it->_buffer += tmp;
                     *state = 0; 
                     break;

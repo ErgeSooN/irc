@@ -77,7 +77,8 @@ class Server
         void Join(std::vector<std::string>&, Client&);
         void User(std::vector<std::string>&, Client&);
         void Mode(std::vector<std::string>&, Client&);
-        
+        void Who(std::vector<std::string>&, Client&);
+        void Cap(std::vector<std::string>&, Client&);
         void Quit(std::vector<std::string>&, Client&);
         
         void Info(std::vector<std::string>&, Client&);

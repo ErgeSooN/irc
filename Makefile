@@ -17,11 +17,9 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
 $(OBJ_DIR):
 	mkdir -p $(dir $(OBJ_FILES))
 
-bonus:
-	$(CC) $(CFLAGS) $(SRC_DIR)/bot/*.cpp $(SRC_DIR)/Utils.cpp $^ -o bot
 
 clean:
-	rm -rf $(NAME) bot
+	rm -rf $(NAME)
 
 fclean: clean
 	rm -rf $(OBJ_DIR)
