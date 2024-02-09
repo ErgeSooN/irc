@@ -11,11 +11,13 @@ void Server::Join(std::vector<std::string>& params, Client& cli)
     if (params.size() == 2)
         key = params[1];
     int isThere = 0;
-    if (chan.empty()) {
+    if (chan.empty()) 
+    {
         Utils::writeMessage(cli._cliFd, ERR_NEEDMOREPARAMS(cli._nick, "JOIN"));
         return;
     }
-    if (chan[0] != '#' || chan.size() == 1) {
+    if (chan[0] != '#' || chan.size() == 1) 
+    {
         Utils::writeMessage(cli._cliFd, ERR_INVCHANNAME);
         return;
     }

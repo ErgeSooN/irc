@@ -3,7 +3,7 @@
 void Server::Part(std::vector<std::string>& params, Client& cli)
 {
     passChecker(cli);
-    if (params.size() > 2)
+    if (params.size() != 1)
         Utils::writeMessage(cli._cliFd, ERR_NEEDMOREPARAMS(cli._nick, params[0]));
     else if (isChannelExist(params[0]))
     {
@@ -31,5 +31,5 @@ void Server::Part(std::vector<std::string>& params, Client& cli)
         }
     }
     else    
-        Utils::writeMessage(cli._cliFd, ERR_NOSUCHCHANNEL(params[0], params[1]));
+        Utils::writeMessage(cli._cliFd, ERR_NOSUCHCHANNEL(cli._nick, params[0]));
 }
