@@ -38,6 +38,8 @@ void Server::initCommands()
     _commands["KICK"] = &Server::Kick;
     _commands["MODE"] = &Server::Mode;
     _commands["WHO"] = &Server::Who;
+    _commands["PART"] = &Server::Part;
+
 
     _commands["pass"] = &Server::Pass;
     _commands["nick"] = &Server::Nick;
@@ -51,6 +53,8 @@ void Server::initCommands()
     _commands["kick"] = &Server::Kick;
     _commands["mode"] = &Server::Mode;
     _commands["who"] = &Server::Who;
+    _commands["part"] = &Server::Part;
+
 }
 
 void Server::createSocket()
@@ -75,7 +79,7 @@ void Server::bindSocket(size_t const & port)
     if (bind(_serverFd, (struct sockaddr *) &server_addr, sizeof(server_addr)) < 0) //burada server_addr structını serverFd'ye bağlıyoruz
         throw std::runtime_error("Bind");
 
-    if (listen(_serverFd, SOMAXCONN) < 0) //burada serverFd'yi dinliyoruz
+    if (listen(_serverFd, SOMAXCONN) < 0) //burada serverFd'yi dinliyoruz // SOMAXCONN: listen tarafından belirlenebilen maksimum kuyruk uzunluğu.
         throw std::runtime_error("Listen");
 }
 
@@ -174,7 +178,6 @@ void Server::readEvent(int* state)
                 }
                 if (tmp[tmp.length() - 1] != '\n') // eğer clientten gelen mesajın sonunda \n yoksa mesajı buffer'a ekliyoruz.
                 {
-                    std::cout << YELLOW << "newline\n"<< RESET;
                     it->_buffer += tmp;
                     *state = 0; 
                     break;

@@ -1,4 +1,5 @@
 #include "../../includes/Server.hpp"
+#include "../../includes/Utils.hpp"
 #include <algorithm>
 
 void Server::Mode(std::vector<std::string>& params, Client& cli)
@@ -82,7 +83,7 @@ void Server::modesLimit(chanIt& it, std::vector<std::string>& params, int* flag)
             Utils::writeMessage(getOpFd(it->_opNick), ERR_NEEDMOREPARAMS(it->_opNick, params[1]));
             return ;
         }
-        it->_userLimit = std::stoi(params[2]);
+        it->_userLimit = ft_stoi(params[2]);
     }
     Utils::writeMessage(getOpFd(it->_opNick), RPL_MODE(it->_opNick, params[0], "+l", params[2]));
     return ;

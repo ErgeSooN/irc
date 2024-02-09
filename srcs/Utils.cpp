@@ -46,3 +46,12 @@ std::string Utils::welcome()
     
     return data;
 }
+
+int ft_stoi(const std::string& str) 
+{
+    std::istringstream iss(str); // Stringi bir string stream'e yerleştir
+    int result;
+    if (!(iss >> result)) // int değere dönüşüm yap
+        throw std::invalid_argument("Invalid argument");     // Dönüşüm hatası durumunda buraya düşülebilir
+    return result;
+}

@@ -80,7 +80,7 @@ class Server
         void Who(std::vector<std::string>&, Client&);
         void Cap(std::vector<std::string>&, Client&);
         void Quit(std::vector<std::string>&, Client&);
-        
+        void Part(std::vector<std::string>&, Client&);
         void Info(std::vector<std::string>&, Client&);
         void Privmsg(std::vector<std::string>&, Client&);
         void Kick(std::vector<std::string>&, Client&);

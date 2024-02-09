@@ -23,6 +23,7 @@ std::string infoMessage()
     message += "|   - PRIVMSG                                              |\n";
     message += "|   - WHO                                                  |\n";
     message += "|   - QUIT                                                 |\n"; 
+    message += "|   - PART                                                 |\n";
     message += "|   - USER                                                 |\n";
     message += " +--------------------------------------------------------+\n";
     return (message);

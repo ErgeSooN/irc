@@ -26,6 +26,7 @@
 #define RPL_QUIT(source, message)                   ":" + source + " QUIT :" + message + "\r\n"
 #define RPL_MODE(source, channel, modes, args)		":" + source + " MODE " + channel + " " + modes + " " + args + "\r\n"
 #define RPL_INFO(source, info)                      ":" + source + " 371 * :" + info + "\r\n"
+#define RPL_PART(source, channel)					":" + source + " PART :" + channel + "\r\n"
 
 
 
@@ -58,6 +59,8 @@
 #define ERR_INVCHANNAME "Invalid channel name, must be: #<channel name> <?key>\r\n"
 #define ERR_NOSUCHNICK ":No such nick\r\n"
 #define ERR_CHANNOMATCH "Did not channel match\r\n"
+
+int ft_stoi(const std::string& str);
 
 class Utils
 {
